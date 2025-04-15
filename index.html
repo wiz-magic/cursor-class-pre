@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI로 만든 서비스만 10개, 이제 당신 차례입니다</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #fafafa;
+            color: #37352f;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .image-container {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .main-image {
+            width: 100%;
+            max-width: 100%;
+            display: block;
+            margin: 0;
+            padding: 0;
+            object-fit: cover;
+        }
+
+        .content-container {
+            padding: 0 1rem;
+        }
+
+        .gif-container {
+            width: 100%;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 0;
+            text-align: center;
+            background-color: #fff;
+        }
+
+        .gif-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .gif-item {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.75rem;
+            box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 3px;
+            margin: 1.5rem 0;
+            transition: transform 0.2s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: rgba(0, 0, 0, 0.08) 0px 4px 12px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #37352f;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .subsection {
+            margin: 1.25rem 0;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #37352f;
+            margin-bottom: 0.75rem;
+        }
+
+        .content-list {
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .content-list li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .content-list li::before {
+            content: "•";
+            position: absolute;
+            left: -1rem;
+            color: #666;
+        }
+
+        /* 가격 안내 섹션 - 모바일 최적화 */
+        .price-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 8px;
+        }
+
+        .price-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            color: #37352f;
+        }
+
+        .price-title-icon {
+            margin-right: 0.5rem;
+        }
+
+        .price-original {
+            font-size: 1rem;
+            color: #888;
+            text-decoration: line-through;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .price-discount-container {
+            margin-bottom: 1.25rem;
+        }
+
+        .earlybird-tag {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2e7d32;
+            margin-bottom: 0.25rem;
+        }
+
+        .price-discount {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #2e7d32;
+            line-height: 1.2;
+            display: flex;
+            align-items: center;
+        }
+
+        .discount-amount {
+            margin-right: 0.5rem;
+        }
+
+        .discount-tag {
+            display: inline-block;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            vertical-align: middle;
+        }
+
+        .price-note {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #555;
+            margin-top: 0.75rem;
+        }
+
+        .tools-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+        }
+
+        .tool-item {
+            background-color: #f9f8f6;
+            padding: 0.875rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .email-form {
+            background-color: #f9f8f6;
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin: 1.75rem 0;
+            text-align: center;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #666;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background-color: #37352f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: #262522;
+        }
+
+        /* 알림 메시지 스타일 */
+        .notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4caf50;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            text-align: center;
+            font-weight: 500;
+            max-width: 80%;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in forwards;
+        }
+
+        .fade-out {
+            animation: fadeOut 0.3s ease-out forwards;
+        }
+
+        /* 서비스 링크 섹션 스타일 */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        @media (min-width: 768px) {
+            .services-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .service-card {
+            display: block;
+            background-color: #f9f8f6;
+            border-radius: 8px;
+            padding: 1rem;
+            color: #37352f;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            height: 100%;
+        }
+
+        .service-card:hover {
+            background-color: #f1f0ed;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .service-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .service-url {
+            font-size: 0.75rem;
+            color: #777;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mx-auto">
+        <!-- 첫 번째 이미지 - 여백 없이 꽉 채움 -->
+        <div class="image-container">
+            <img src="SAV_250415143016_1.jpeg" alt="AI 서비스를 하루 만에!" class="main-image">
+        </div>
+
+        <!-- 두 번째 이미지 - 여백 없이 꽉 채움 -->
+        <div class="image-container">
+            <img src="SAV_250415143016_2.jpg" alt="AI로 만든 서비스만 10개, 이제 당신 차례입니다" class="main-image">
+        </div>
+
+        <div class="content-container">
+            <!-- GIF 삽입 영역 - 2:2 그리드로 수정 -->
+            <div class="gif-container shadow-sm mt-4">
+                <div class="gif-grid">
+                    <div class="gif-item">
+                        <img src="1.gif" alt="GIF 1" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gif-item">
+                        <img src="2.gif" alt="GIF 2" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gif-item">
+                        <img src="3.gif" alt="GIF 3" class="w-full h-full object-cover">
+                    </div>
+                    <div class="gif-item">
+                        <img src="4.gif" alt="GIF 4" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 강의 커리큘럼 섹션 -->
+            <div class="section">
+                <h2 class="section-title">강의 커리큘럼 📑</h2>
+
+                <div class="subsection">
+                    <h3 class="subtitle">1. AI랑 함께 아이디어부터 기획까지</h3>
+                    <ul class="content-list">
+                        <li>AI로 시장 조사하고 아이디어 수요 확인하기</li>
+                        <li>AI가 이해할 수 있는 기획 문서 작성법 (AI 친화적 기획)</li>
+                    </ul>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subtitle">2. 기술 스택 고르기 &amp; 서비스 방향 정하기</h3>
+                    <ul class="content-list">
+                        <li>서비스 목적에 맞는 기술 스택 고르는 법</li>
+                        <li>Cursor AI에 최적화된 화면 단위 PRD 문서 작성법</li>
+                    </ul>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subtitle">3. 서비스 개발하기 (Cursor AI)</h3>
+                    <ul class="content-list">
+                        <li>Cursor AI 기본 세팅과 활용법</li>
+                        <li>Firebase로 서버 없이 데이터 관리하기</li>
+                        <li>실습 ①: AI 사주 분석 서비스 만들기</li>
+                        <li>실습 ②: 강아지 용품 커머스 서비스 만들기</li>
+                        <li>도메인 연결 + Vercel로 빠르게 배포하기</li>
+                    </ul>
+                </div>
+
+                <div class="subsection">
+                    <h3 class="subtitle">4. 서비스 홍보하기</h3>
+                    <ul class="content-list">
+                        <li>퍼포먼스 마케팅 기본 세팅 따라 하기<br>(광고 계정 만들기, 예산 설정, 타겟팅 등 실전 중심)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 강의를 만든 이유 섹션 -->
+            <div class="section">
+                <h2 class="section-title">강의를 만든 이유 💡</h2>
+
+                <p class="mb-3 text-md">
+                    솔직히 말하면, 1~2번 간단하게 커서로 만들고 전문가인 척 너무 비싸게 강의 파는 걸 보고 어이가 없었어요.
+                    (물론 좋은 강의도 많지만, 가격이 너무 비싼게 함정…)
+                </p>
+
+                <p class="mb-3 text-md">
+                    저는 전문가가 아니에요. 지난 6년 동안 AI도 없던 시절부터 여러 프로젝트를 진행하며 겪은 시행착오를 토대로,
+                    Cursor라는 도구를 통해 더 효율적인 방법을 알려드리려고 합니다.
+                </p>
+
+                <p class="mb-3 text-md"> 그래서 이 강의는 <strong class="text-green-600">'초보자의
+                        눈높이'</strong>에서
+                    만들어졌습니다. </p>
+
+
+                <p class="text-md">
+                    서비스를 만드는 건 목표가 아니라 <strong class="text-green-600">문제 해결의 수단</strong>입니다. 기획부터 개발, 마케팅, 수익화까지 전체 과정을
+                    통합적으로 보여드리며,
+                    여러분의 아이디어가 빛을 발할 수 있도록 돕겠습니다.
+                </p>
+            </div>
+
+            <!-- 가격 안내 섹션 - 모바일 최적화 디자인 -->
+            <div class="price-section">
+                <div class="section-title">
+                    가격 안내 💸
+                </div>
+
+                <div class="price-original">정상가: 59,900원</div>
+
+                <div class="price-discount-container">
+                    <span class="earlybird-tag">얼리버드 특가</span>
+                    <div class="price-discount">
+                        <span class="discount-amount">39,900원</span>
+                        <span class="discount-tag">지금만!</span>
+                    </div>
+                </div>
+
+
+                <div class=" text-md">
+                    <strong>강의는 지금 열심히 준비 중이에요.</strong> <br /> 메일을 남겨주시면 정식 오픈 전에 할인된 가격으로 먼저 만나보실 수 있습니다. 마치
+                    게임에서 현질하면 빠르게 성장하듯, 이 강의는 <strong class="text-green-600">최소 2년의 시행착오</strong>를
+                    줄여줄 겁니다. 지난 6년간 쌓은 실전 노하우를 이 가격에 들을 수 있다면, 꽤 괜찮은 투자 아닐까요?
+
+                </div>
+            </div>
+
+            <!-- 지금까지 만든 서비스들 섹션 (새로 추가) -->
+            <div class="section">
+                <h2 class="section-title">🚀 지금까지 만든 서비스들</h2>
+                <p class="mb-4 text-md">실제로 AI로 만든 서비스들을 직접 구경해보세요. 클릭하면 해당 서비스로 이동합니다.</p>
+
+                <div class="services-grid">
+                    <a href="https://grateful-wood-6af.notion.site/1a763c2fc6d080069380c29ac913b339?pvs=4&utm_source=threads&utm_medium=link"
+                        target="_blank" class="service-card">
+                        <div class="service-name">캐시플로우</div>
+
+                    </a>
+
+                    <a href="https://www.coinkkolmuse.com/" target="_blank" class="service-card">
+                        <div class="service-name">코인껄무새</div>
+
+                    </a>
+
+                    <a href="https://www.slownyamnyam.kr/" target="_blank" class="service-card">
+                        <div class="service-name">저속냠냠</div>
+
+                    </a>
+
+                    <a href="https://persona-beige.vercel.app/" target="_blank" class="service-card">
+                        <div class="service-name">페르소나</div>
+
+                    </a>
+
+                    <a href="https://nugu-zeta.vercel.app/" target="_blank" class="service-card">
+                        <div class="service-name">나는 누구</div>
+
+                    </a>
+
+                    <a href="https://money-power-calculator.vercel.app/" target="_blank" class="service-card">
+                        <div class="service-name">진짜 돈 계산기</div>
+
+                    </a>
+                </div>
+            </div>
+
+            <!-- 사용할 툴 섹션 -->
+            <div class="section">
+                <h2 class="section-title">🛠️ 함께 쓸 툴들</h2>
+
+                <div class="tools-list">
+                    <div class="tool-item">
+                        <p>Cursor AI</p>
+                        <small class="text-gray-500">유료, 강의에서 메인으로 사용</small>
+                    </div>
+                    <div class="tool-item">
+                        <p>Gemini</p>
+                        <small class="text-gray-500">ChatGPT도 가능</small>
+                    </div>
+                    <div class="tool-item">
+                        <p>Firebase</p>
+                        <small class="text-gray-500">서버 없이 데이터 저장</small>
+                    </div>
+                    <div class="tool-item">
+                        <p>Vercel</p>
+                        <small class="text-gray-500">서비스 빠르게 배포</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 이메일 수집 양식 섹션 -->
+            <div class="email-form shadow-sm">
+                <h2 class="text-xl font-bold mb-3">📧 강의 출시 소식 받기</h2>
+                <p class="text-sm mb-4">
+                    이메일을 남기시면 강의 출시 소식과 얼리버드 할인 정보를 가장 먼저 받아보실 수 있습니다.
+                </p>
+                <form id="emailForm" class="w-full">
+                    <input type="email" id="emailInput" name="email" placeholder="이메일 주소를 입력하세요" required
+                        class="form-input">
+                    <button type="submit" class="submit-btn">등록하기</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 알림 메시지 -->
+    <div id="notification" class="notification">
+        이메일이 성공적으로 등록되었습니다! 강의 출시 소식을 곧 알려드릴게요.
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('emailForm');
+            const notification = document.getElementById('notification');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const email = document.getElementById('emailInput').value;
+                if (!email) return;
+
+                // 구글 스크립트 URL (나중에 실제 URL로 교체해야 함)
+                const scriptURL = 'https://script.google.com/macros/s/AKfycbzEK9sNNhhzTusMgpjI6siamhqEYoj36Sbm8V-mtYK0a8d8tSmxP42RPE35hVTZYckH7Q/exec';
+
+                // 데이터 전송
+                fetch(scriptURL, {
+                    method: 'POST',
+                    mode: 'no-cors', // CORS 이슈 방지
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email }),
+                })
+                    .then(() => {
+                        // 폼 초기화
+                        form.reset();
+
+                        // 알림 표시
+                        notification.classList.add('fade-in');
+                        notification.style.display = 'block';
+
+                        // 3초 후 알림 숨기기
+                        setTimeout(() => {
+                            notification.classList.remove('fade-in');
+                            notification.classList.add('fade-out');
+                            setTimeout(() => {
+                                notification.style.display = 'none';
+                                notification.classList.remove('fade-out');
+                            }, 300);
+                        }, 3000);
+                    })
+                    .catch(error => console.error('Error!', error.message));
+            });
+        });
+    </script>
+</body>
+
+</html>
